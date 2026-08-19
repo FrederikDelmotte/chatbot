@@ -20,7 +20,7 @@ system_instruction = (
 )
 
 model = genai.GenerativeModel(
-    "gemini-1.5-flash", system_instruction=system_instruction
+    "gemini-2.0-flash", system_instruction=system_instruction
 )
 
 if "messages" not in st.session_state:
