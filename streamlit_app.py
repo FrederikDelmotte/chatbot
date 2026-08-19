@@ -8,7 +8,7 @@ st.caption(
     " Succes!"
 )
 
-# Haal de API key op uit Secrets
+# 1. Haal de API key op uit Secrets
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
@@ -18,11 +18,27 @@ system_instruction = (
     " het nieuwe strafwetboek."
 )
 
-# Gebruik gemini-1.5-flash-latest (of gemini-2.0-flash) om 404 te voorkomen
-model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash-latest", system_instruction=system_instruction
-)
 
+# 2. Zoek automatisch naar een actief model op jouw account om 404-fouten te voorkomen
+@st.cache_resource
+def load_model():
+  available_models = [
+      m.name
+      for m in genai.list_models()
+      if "generateContent" in m.supported_generation_methods
+  ]
+  # Zoek bij voorkeur een flash model, anders pak de eerste beschikbare
+  chosen_model = next(
+      (m for m in available_models if "flash" in m), available_models[0]
+  )
+  return genai.GenerativeModel(
+      model_name=chosen_model, system_instruction=system_instruction
+  )
+
+
+model = load_model()
+
+# 3. Chat-interface
 if "messages" not in st.session_state:
   st.session_state.messages = []
 
