@@ -8,19 +8,19 @@ st.caption(
     " Succes!"
 )
 
-# Haal de Gemini API sleutel op uit Secrets
+# Haal de API key op uit Secrets
 api_key = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=api_key)
 
-# Systeeminstructie voor het strafwetboek
 system_instruction = (
     "Je bent een assistent voor politie-inspecteurs van de PZ VA. "
     "Beantwoord vragen professioneel, helder en juridisch correct op basis van"
     " het nieuwe strafwetboek."
 )
 
+# Gebruik gemini-1.5-flash-latest (of gemini-2.0-flash) om 404 te voorkomen
 model = genai.GenerativeModel(
-    "gemini-2.0-flash", system_instruction=system_instruction
+    model_name="gemini-1.5-flash-latest", system_instruction=system_instruction
 )
 
 if "messages" not in st.session_state:
