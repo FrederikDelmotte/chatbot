@@ -27,7 +27,7 @@ system_instruction = (
 
 try:
   model = genai.GenerativeModel(
-      model_name="models/gemini-3.6-flash",
+      model_name="models/gemini-3.7-flash",
       system_instruction=system_instruction,
   )
 except Exception as e:
